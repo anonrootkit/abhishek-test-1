@@ -39,6 +39,7 @@ class HomeFragment : Fragment() {
                     }
                     FetchStatus.FETCHED -> {
                         homeBinding.progressBar.visibility = View.GONE
+                        homeBinding.listView.visibility = View.VISIBLE
                     }
                     FetchStatus.ERROR -> {
                         homeBinding.progressBar.visibility = View.GONE
