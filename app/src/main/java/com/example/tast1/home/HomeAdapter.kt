@@ -9,7 +9,11 @@ import android.widget.TextView
 import com.example.tast1.R
 import com.example.tast1.model.FacilityItem
 
-class HomeAdapter(context: Context, values : List<Any>) : ArrayAdapter<Any>(context, 0, values) {
+class HomeAdapter(
+    context: Context,
+    values : List<Any>,
+    private val onItemSelected : (String) -> Unit
+    ) : ArrayAdapter<Any>(context, 0, values) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val data : Any = getItem(position)!!
@@ -25,6 +29,19 @@ class HomeAdapter(context: Context, values : List<Any>) : ArrayAdapter<Any>(cont
             is FacilityItem -> {
                 view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.facility_item, parent, false)
+
+                if (data.isSelected){
+                    view.isActivated = true
+                    view.setBackgroundResource(R.drawable.ic_launcher_background)
+                }else{
+                    view.isActivated = false
+                    view.setBackgroundResource(0)
+                }
+
+                view.setOnClickListener {
+                    onItemSelected(data.itemId)
+                }
+
                 view.findViewById<TextView>(R.id.facility_name).text = data.name
             }
         }

@@ -17,5 +17,6 @@ data class FacilityItem(
     @SerializedName("name")
     val name : String,
     @SerializedName("icon")
-    val icon : String
+    val icon : String,
+    var isSelected : Boolean = false
 )

@@ -29,6 +29,103 @@ class HomeViewModel(context: Context) : ViewModel() {
     val genericList : LiveData<List<Any>>
         get() = _genericList
 
+    private val _lastSelectedPropertyId : MutableLiveData<String> = MutableLiveData()
+
+    private val _lastSelectedRoomId : MutableLiveData<String> = MutableLiveData()
+
+    private val _lastSelectedOtherFacilityId : MutableLiveData<String> = MutableLiveData()
+
+    fun updateLastSelectedPropertyId(newSelectedId : String) {
+        if (newSelectedId == "4" && _lastSelectedRoomId.value == "6") return
+        if (newSelectedId == "3" && _lastSelectedOtherFacilityId.value == "12") return
+        val lastSelectedId = _lastSelectedPropertyId.value ?: ""
+
+        val currentList : List<Facility> = _facilities.value ?: return
+
+        val newTempList : ArrayList<Facility> = ArrayList()
+        newTempList.addAll(currentList)
+        _lastSelectedPropertyId.value = newSelectedId
+
+        currentList.mapIndexed { facilityIndex, facility ->
+            facility.facilities.mapIndexed { facilityItemIndex, facilityItem ->
+                if (facilityItem.itemId == lastSelectedId){
+                    newTempList[facilityIndex].facilities[facilityItemIndex].isSelected = false
+                }
+
+                if (facilityItem.itemId == newSelectedId) {
+                    if (newSelectedId != lastSelectedId)
+                        newTempList[facilityIndex].facilities[facilityItemIndex].isSelected = true
+                    else
+                        _lastSelectedPropertyId.value = null
+                }
+            }
+        }
+
+        _facilities.value = newTempList
+        parseFacilitiesToGenericList(_facilities.value!!)
+    }
+
+    fun updateLastSelectedRoomId(newSelectedId : String) {
+        if (newSelectedId == "6" && _lastSelectedPropertyId.value == "4") return
+        if (newSelectedId == "7" && _lastSelectedOtherFacilityId.value == "12") return
+
+        val lastSelectedId = _lastSelectedRoomId.value ?: ""
+
+        val currentList : List<Facility> = _facilities.value ?: return
+
+        val newTempList : ArrayList<Facility> = ArrayList()
+        newTempList.addAll(currentList)
+        _lastSelectedRoomId.value = newSelectedId
+
+        currentList.mapIndexed { facilityIndex, facility ->
+            facility.facilities.mapIndexed { facilityItemIndex, facilityItem ->
+                if (facilityItem.itemId == lastSelectedId){
+                    newTempList[facilityIndex].facilities[facilityItemIndex].isSelected = false
+                }
+
+                if (facilityItem.itemId == newSelectedId) {
+                    if (newSelectedId != lastSelectedId)
+                        newTempList[facilityIndex].facilities[facilityItemIndex].isSelected = true
+                    else
+                        _lastSelectedRoomId.value = null
+                }
+            }
+        }
+
+        _facilities.value = newTempList
+        parseFacilitiesToGenericList(_facilities.value!!)
+    }
+
+    fun updateLastSelectedOtherFacilitiesId(newSelectedId : String) {
+        if (newSelectedId == "12" && _lastSelectedPropertyId.value == "3") return
+        if (newSelectedId == "12" && _lastSelectedRoomId.value == "7") return
+
+        val lastSelectedId = _lastSelectedOtherFacilityId.value ?: ""
+
+        val currentList : List<Facility> = _facilities.value ?: return
+
+        val newTempList : ArrayList<Facility> = ArrayList()
+        newTempList.addAll(currentList)
+        _lastSelectedOtherFacilityId.value = newSelectedId
+
+        currentList.mapIndexed { facilityIndex, facility ->
+            facility.facilities.mapIndexed { facilityItemIndex, facilityItem ->
+                if (facilityItem.itemId == lastSelectedId){
+                    newTempList[facilityIndex].facilities[facilityItemIndex].isSelected = false
+                }
+
+                if (facilityItem.itemId == newSelectedId) {
+                    if (newSelectedId != lastSelectedId)
+                        newTempList[facilityIndex].facilities[facilityItemIndex].isSelected = true
+                    else
+                        _lastSelectedOtherFacilityId.value = null
+                }
+            }
+        }
+
+        _facilities.value = newTempList
+        parseFacilitiesToGenericList(_facilities.value!!)
+    }
 
     fun fetchDataFromInternet() {
         _fetchStatus.value = FetchStatus.FETCHING

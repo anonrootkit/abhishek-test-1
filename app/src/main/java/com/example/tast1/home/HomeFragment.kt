@@ -14,7 +14,25 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
 
     private val homeAdapter : HomeAdapter by lazy {
-        HomeAdapter(requireContext(), ArrayList())
+        HomeAdapter(
+            requireContext(),
+            ArrayList(),
+            onItemSelected = { newSelectedId ->
+                when(newSelectedId){
+                    "1", "2", "3", "4" -> {
+                        viewModel.updateLastSelectedPropertyId(newSelectedId)
+                    }
+
+                    "6", "7" -> {
+                        viewModel.updateLastSelectedRoomId(newSelectedId)
+                    }
+
+                    else -> {
+                        viewModel.updateLastSelectedOtherFacilitiesId(newSelectedId)
+                    }
+                }
+            }
+        )
     }
 
     override fun onCreateView(
